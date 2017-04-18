@@ -1,0 +1,26 @@
+ version: '2'
+ volumes:
+  postgres-data:
+    driver: local
+
+ services:
+   postgres:
+     image: postgres:9.5.4
+     ports:
+       - 5432:5432
+     volumes:
+       - postgres-data:/var/lib/postgresql/data
+     environment:
+       POSTGRES_PASSWORD: 3x4mpl3
+
+   web:
+     build: .
+     command: python manage.py runserver 0.0.0.0:8000
+     volumes:
+       - .:/code
+     ports:
+       - 8000:8000
+     depends_on:
+       - postgres
+     links:
+       - postgres:db
